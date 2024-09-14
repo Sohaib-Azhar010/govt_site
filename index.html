@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Generation with jsPDF</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <script>
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        // Capture values from input fields
+        const address = document.getElementById("inputAddress").value;
+        const phone = document.getElementById("inputPhone").value;
+        const dateValue = document.getElementById("inputDate").value;
+        const designation = document.getElementById("inputDesignation").value;
+        const department = document.getElementById("inputDepartment").value;
+        const subject = document.getElementById("inputSubject").value;
+        const salutation = document.getElementById("salutationSelect").value;
+        const content = document.getElementById("inputContent").value;
+        const content2 = document.getElementById("inputContent2").value;
+        
+        const Signingauthority = document.getElementById("Signingauthority").value;
+        const similarcompliance1 =
+          document.getElementById("similarcompliance1").value;
+        const similarcompliance2 =
+          document.getElementById("similarcompliance2").value;
+        const similarcompliance3 =
+          document.getElementById("similarcompliance3").value;
+          const similarcompliance4 =
+          document.getElementById("similarcompliance4").value;
+          const similarcompliance5 =
+          document.getElementById("similarcompliance5").value;
+          const similarcompliance6 =
+          document.getElementById("similarcompliance6").value;
+
+        const date = new Date(dateValue);
+        const day = date.getDate();
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+        const formattedDate = `${day}-${month}-${year}`;
+
+        // Add the logo image on the top-left corner (Assumed logo URL or base64 encoded image)
+        const logoUrl = "/logo.png"; // Replace with actual path or base64 image
+        pdf.addImage(logoUrl, "PNG", 15, 10, 30, 35); // Logo on the top-left corner
+
+        // Add Header (Text aligned to the right of the logo)
+        pdf.setFontSize(12);
+        pdf.text("No. 17-EX(IX)2024/437.38", 178, 20, { align: "right" });
+        pdf.setFontSize(12);
+        pdf.text("ANTI-CORRUPTION ESTABLISHMENT", 190, 25, { align: "right" });
+        pdf.setFontSize(12);
+        pdf.text("HEAD QUARTER", 172, 30, { align: "right" });
+        pdf.setFontSize(12);
+        pdf.text("GOVERNMENT OF SINDH", 180, 35, { align: "right" });
+        pdf.setFontSize(10);
+        pdf.text(`${address}`, 190, 38, { align: "right" }); // Address field
+        pdf.setFontSize(10);
+        pdf.text(`Phone: ${phone}`, 190, 41, { align: "right" }); // Phone number field
+        pdf.setFontSize(12);
+        pdf.text(`Dated the ${formattedDate}`, 190, 47, { align: "right" });
+
+        // Add "To" section
+        pdf.setFontSize(12);
+        pdf.text("To,", 20, 65);
+        pdf.text(`${designation}`, 35, 70);
+        pdf.text(`${department}`, 35, 75);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(`Sindh`, 35, 80);
+        const textWidt = pdf.getTextWidth("Sindh"); // Get the width of the subject text
+        pdf.setLineWidth(0.5);
+        pdf.line(35, 81, 35 + textWidt, 81); // Draw underline
+
+        // Add Subject
+        pdf.setFontSize(12);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("SUBJECT:", 20, 95); // "SUBJECT:" heading
+
+        // Add subject text (normal and underlined)
+        pdf.setFont("helvetica", "bold");
+        pdf.text(subject, 50, 95); // Subject text
+
+        // Underline the subject text
+        const textWidth = pdf.getTextWidth(subject); // Get the width of the subject text
+        pdf.setLineWidth(0.5);
+        pdf.line(50, 96, 50 + textWidth, 96); // Draw underline
+
+        // Add Salutation and Content
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(12);
+        pdf.text(`${salutation},`, 20, 105); // Add the selected salutation (Respected Sir/Madam)
+
+        // Split the content into lines with different widths for the first and subsequent lines
+               // Add Content
+               pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(12);
+        pdf.text(`${salutation},`, 20, 105); // Add the selected salutation (Respected Sir/Madam)
+
+        // Split the content into lines with different widths for the first and subsequent lines
+        const firstLine = pdf.splitTextToSize(content, 170)[0]; // Adjusted width
+        const remainingLines = pdf.splitTextToSize(
+          content.slice(firstLine.length),
+          170
+        ); // Adjusted width
+
+        // Add the first line with a gap of 50 and max width of 170
+        pdf.text(firstLine, 20, 120);
+
+        // Add subsequent lines with a gap of 10 and max width of 170
+        let y = 125;
+        for (let i = 0; i < remainingLines.length; i++) {
+          pdf.text(remainingLines[i], 20, y); // Adjust line height
+          y += 10; // Increase the y position for each line
+        }
+
+        const firstLinec2 = pdf.splitTextToSize(content2, 170)[0]; // Adjusted width
+        const remainingLinesc2 = pdf.splitTextToSize(
+          content2.slice(firstLinec2.length),
+          170
+        ); // Adjusted width
+
+        // Add the first line with a gap of 50 and max width of 170
+        pdf.text(firstLinec2, 20, y);
+
+        // Add subsequent lines with a gap of 10 and max width of 170
+        y += 10;
+        for (let i = 0; i < remainingLinesc2.length; i++) {
+          pdf.text(remainingLinesc2[i], 20, y); // Adjust line height
+          y += 10; // Increase the y position for each line
+        }
+
+        pdf.setFont("helvetica");
+        pdf.text("1. " + similarcompliance1, 20, 230);
+        pdf.text("2. " + similarcompliance2, 20, 235);
+        pdf.text("3. " + similarcompliance3, 20, 240);
+        pdf.text("4. " + similarcompliance4, 20, 245);
+        pdf.text("5. " + similarcompliance5, 20, 250);
+        pdf.text("6. " + similarcompliance6, 20, 255);
+        const logoUrl2 = "/qr.PNG"; // Replace with actual path or base64 image
+        pdf.addImage(logoUrl2, "PNG", 40, 180, 30, 35); // Logo on the top-left corner
+
+        // Footer (Signature)
+        pdf.text("DEPUTY DIRECTOR (HQ-II)", 180, 195, { align: "right" });
+        pdf.setFontSize(10);
+        pdf.text("For Director ACE Sindh", 170, 199, { align: "right" });
+        pdf.setFontSize(8);
+        pdf.text(`Phone: ${phone}`, 135, 204); // Add the entered phone number in the footer
+        pdf.setFontSize(10);
+        pdf.text("A copy is forwarded for similar compliance:", 20, 225);
+        // Save the generated PDF
+        pdf.setFontSize(12) ;
+        pdf.text(Signingauthority, 180, 270, { align: "right" });
+        pdf.save("letter.pdf");
+      }
+    </script>
+    <style>
+      body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+      #main-container {
+        display: flex;
+        flex-grow: 1;
+        margin-top: 1rem;
+      }
+
+      .navbar {
+        height: 60px;
+      }
+      .sidebar {
+        width: 250px;
+        padding: 1rem;
+        background-color: #198754; /* Bootstrap success color */
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        height: 100vh;
+        border-radius: 5px;
+      }
+      .recent-letters,
+      .search-bar {
+        flex-grow: 1;
+        overflow-y: auto;
+      }
+      .recent-letters ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      .recent-letters ul li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+      }
+      .form-container {
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <div class="container-fluid">
+        <!-- Navbar title in the center -->
+        <div class="mx-auto">
+          <span class="navbar-brand text-white mx-auto">Letter Management</span>
+        </div>
+
+        <!-- Logout and Settings icons on the right -->
+        <div class="d-flex">
+          <a class="nav-link text-white mx-1" href="#">
+            <i class="fas fa-cog"></i> Settings
+          </a>
+          <a class="nav-link text-white" href="#">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main container with Form in the center and Sidebars on both sides -->
+    <div id="main-container" class="container-fluid">
+      <!-- Left Sidebar (Recent Letters) -->
+      <div class="sidebar bg-info">
+        <div class="recent-letters">
+          <h5>Recent Letters</h5>
+          <ul>
+            <li>Letter 1: Important Document</li>
+            <li>Letter 2: Approval Notice</li>
+            <li>Letter 3: Meeting Agenda</li>
+            <li>Letter 4: Invoice Details</li>
+            <!-- Add more list items as needed -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Simple Form for Data Entry -->
+      <div class="container form-container px-5">
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col text-center">
+              <!-- Letter Form Button -->
+              <a href="index.html" class="btn btn-success mx-2"
+                >Letter Form</a
+              >
+              <!-- Order Form Button -->
+              <a href="order.html" class="btn btn-outline-success mx-2"
+                >Order Form</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <form class="border p-4">
+          <div class="form-group mb-3">
+            <label for="inputAddress">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputAddress"
+              placeholder="Enter Address (e.g. Punjab, Pakistan)"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputPhone">Phone Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputPhone"
+              placeholder="Enter Phone Number"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputDate">Date</label>
+            <input type="date" class="form-control" id="inputDate" />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputDesignation">Designation</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputDesignation"
+              placeholder="Enter Designation"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputDepartment">Department</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputDepartment"
+              placeholder="Enter Department"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputSubject">Subject</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputSubject"
+              placeholder="Enter Subject"
+            />
+          </div>
+
+          <!-- Dropdown for Salutation (Sir/Madam) -->
+          <div class="form-group mb-3">
+            <label for="salutationSelect">Salutation</label>
+            <select class="form-control" id="salutationSelect">
+              <option value=""></option>
+              <option value="Respected Sir">Respected Sir</option>
+              <option value="Respected Madam">Respected Madam</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="inputContent">Content</label>
+            <textarea
+              class="form-control"
+              id="inputContent"
+              rows="4"
+              placeholder="Enter Content"
+            ></textarea>
+            <label for="inputContent2">Content</label>
+            <textarea
+              class="form-control"
+              id="inputContent2"
+              rows="4"
+              placeholder="Enter Content"
+            ></textarea>
+          </div>
+          <div class="form-group form-check mb-3">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="copyForwardCheckbox"
+              onchange="toggleSimilarComplianceFields()"
+            />
+            <label class="form-check-label" for="copyForwardCheckbox">
+              A copy is forwarded to similar compliance
+            </label>
+          </div>
+
+          <!-- Fields for similar compliance, hidden by default -->
+          <div id="similarComplianceFields" style="display: none">
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance1"
+                placeholder="Enter Subject 1"
+              />
+            </div>
+
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance2"
+                placeholder="Enter Subject 2"
+              />
+            </div>
+
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance3"
+                placeholder="Enter Subject 3"
+              />
+            </div>
+            
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance4"
+                placeholder="Enter Subject 4"
+              />
+            </div>
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance5"
+                placeholder="Enter Subject 5"
+              />
+            </div>
+            <div class="form-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="similarcompliance6"
+                placeholder="Enter Subject 6"
+              />
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="Signingauthority">Signingauthority</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Signingauthority"
+              placeholder="Signingauthority"
+            />
+          </div>
+
+          <button type="button" class="btn btn-primary" onclick="generatePDF()">
+            Download PDF
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Sidebar (Search bar) -->
+      <div class="sidebar bg-info">
+        <div class="search-bar">
+          <!-- Search bar -->
+          <div class="form-group">
+            <label for="searchLetters" class="mb-2">Search Letters</label>
+            <input
+              type="text"
+              id="searchLetters"
+              class="form-control"
+              placeholder="Search..."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function toggleSimilarComplianceFields() {
+        const checkbox = document.getElementById("copyForwardCheckbox");
+        const similarComplianceFields = document.getElementById(
+          "similarComplianceFields"
+        );
+
+        if (checkbox.checked) {
+          similarComplianceFields.style.display = "block";
+        } else {
+          similarComplianceFields.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

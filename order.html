@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Navbar with Side Navbar and Search</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="stylesheet" href="letterstyle.css">
+  </head>
+  <body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg bg-success">
+      <div class="container-fluid">
+        <!-- Toggle Side Navbar Button -->
+        <button
+          class="btn btn-success"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sideNavbar"
+          aria-controls="sideNavbar"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Navbar Brand -->
+        <a class="navbar-brand mx-auto text-white" href="#">ANTI-CURRUPTION ESTABLISHMENT</a>
+
+        <!-- Login and Logout Icons -->
+        <div class="d-flex">
+          <a class="nav-link text-white" href="#"
+            ><i class="fas fa-sign-in-alt"></i> Login</a
+          >
+          <span class="mx-3"></span>
+          <a class="nav-link text-white" href="#"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Side Navbar -->
+    <div
+      class="offcanvas offcanvas-start bg-success text-white"
+      tabindex="-1"
+      id="sideNavbar"
+      aria-labelledby="sideNavbarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sideNavbarLabel">Recent Letters</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <!-- Search for recent letters -->
+        <div class="mb-3">
+          <label for="searchLetters" class="form-label"
+            >Search Recent Letters</label
+          >
+          <input
+            type="text"
+            id="searchLetters"
+            class="form-control"
+            placeholder="Search..."
+          />
+        </div>
+
+        <!-- List of recent letters -->
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-success text-white">Letter 1</li>
+          <li class="list-group-item bg-success text-white">Letter 2</li>
+          <li class="list-group-item bg-success text-white">Letter 3</li>
+          <!-- Add more list items as needed -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content with Buttons -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col text-center">
+          <!-- Letter Form Button -->
+          <a href="index.html" class="btn btn-outline-success mx-2"
+            >Letter Form</a
+          >
+          <!-- Order Form Button -->
+          <a href="order.html" class="btn btn-success mx-2"
+            >Order Form</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col text-center">
+                <h2 class="mb-3">Order Form</h2>
+            </div>
+        </div>
+   
+    
+
+      <form id="orderForm">
+        <!-- Same three fields as the previous form -->
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input type="text" class="form-control" id="inputAddress" placeholder="Enter Address" />
+        </div>
+
+        <div class="form-group">
+          <label for="inputPhone">Phone</label>
+          <input type="text" class="form-control" id="inputPhone" placeholder="Enter Phone Number" />
+        </div>
+
+        <div class="form-group">
+          <label for="inputDate">Date</label>
+          <input type="date" class="form-control" id="inputDate" />
+        </div>
+
+        <!-- New "Order" Section -->
+
+
+        <!-- Content text box -->
+        <div class="form-group">
+          <label for="orderContent">Order Content</label>
+          <textarea class="form-control" id="orderContent" rows="5" placeholder="Enter Order Content"></textarea>
+        </div>
+        <div class="form-group form-check mb-3">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="copyForwardCheckbox"
+            onchange="toggleSimilarComplianceFields()"
+          />
+          <label class="form-check-label" for="copyForwardCheckbox">
+            A copy is forwarded to similar compliance
+          </label>
+        </div>
+
+        <!-- Fields for similar compliance, hidden by default -->
+        <div id="similarComplianceFields" style="display: none">
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="similarcompliance1"
+              placeholder="Enter Subject 1"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="similarcompliance2"
+              placeholder="Enter Subject 2"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="similarcompliance3"
+              placeholder="Enter Subject 3"
+            />
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="Signingauthority">Signingauthority</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Signingauthority"
+            placeholder="Signingauthority"
+          />
+        </div>
+      
+        
+
+        <button type="button" class="btn btn-primary" onclick="generateOrderPDF()">Generate PDF</button>
+      </form>
+    </div>
+  </div>
+  
+    <script>
+       function toggleSimilarComplianceFields() {
+        const checkbox = document.getElementById("copyForwardCheckbox");
+        const similarComplianceFields = document.getElementById(
+          "similarComplianceFields"
+        );
+
+        if (checkbox.checked) {
+          similarComplianceFields.style.display = "block";
+        } else {
+          similarComplianceFields.style.display = "none";
+        }
+      }
+      function generateOrderPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+
+  // Capture values from the form
+  const address = document.getElementById("inputAddress").value;
+  const phone = document.getElementById("inputPhone").value;
+  const dateValue = document.getElementById("inputDate").value;
+  const orderContent = document.getElementById("orderContent").value;
+  const Signingauthority = document.getElementById("Signingauthority").value;
+  const similarcompliance1 = document.getElementById("similarcompliance1").value;
+  const similarcompliance2 = document.getElementById("similarcompliance2").value;
+  const similarcompliance3 = document.getElementById("similarcompliance3").value;
+
+  // Format date
+  const date = new Date(dateValue);
+  if (isNaN(date.getTime())) {
+    alert('Please enter a valid date');
+    return;
+  }
+  const day = date.getDate();
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+  ];
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+  const formattedDate = `${day}-${month}-${year}`;
+
+  // Add logo (using base64 logo for simplicity, replace with your own if needed)
+  const logoUrl = "/logo.png"; // Replace with actual path or base64 image
+  pdf.addImage(logoUrl, "PNG", 15, 10, 30, 35);
+
+  // Add header information
+  pdf.setFontSize(12);
+  pdf.text("No. 17-EX(IX)2024/437.38", 178, 20, { align: "right" });
+  pdf.text("ANTI-CORRUPTION ESTABLISHMENT", 190, 25, { align: "right" });
+  pdf.text("HEAD QUARTER", 172, 30, { align: "right" });
+  pdf.text("GOVERNMENT OF SINDH", 180, 35, { align: "right" });
+  pdf.setFontSize(8);
+  pdf.text(`${address}`, 190, 38, { align: "right" });
+  pdf.text(`Phone: ${phone}`, 190, 41, { align: "right" });
+  pdf.setFontSize(12);
+  pdf.text(`Dated the ${formattedDate}`, 190, 47, { align: "right" });
+
+  // Order Section
+  pdf.setFontSize(12);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("ORDER", 20, 70); // Order title
+
+  // Add Order Content
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(8); // Reduced font size for content
+  const orderLines = pdf.splitTextToSize(orderContent, 170);
+  orderLines.forEach((line, index) => {
+    pdf.text(line, 20, 90 + index * 10);
+  });
+
+  // Similar Compliance Section
+  pdf.setFontSize(10); // Reset font size for compliance section
+  pdf.setFont("helvetica", "normal");
+  pdf.text("A copy is forwarded for similar compliance:", 20, 225);
+  pdf.text("1. " + similarcompliance1, 20, 230);
+  pdf.text("2. " + similarcompliance2, 20, 235);
+  pdf.text("3. " + similarcompliance3, 20, 240);
+
+  // Footer (Signature)
+  pdf.setFontSize(10);
+  pdf.text(Signingauthority, 180, 245, { align: "right" });
+  pdf.setFontSize(12);
+  pdf.text("DEPUTY DIRECTOR (HQ-II)", 180, 195, { align: "right" });
+  pdf.setFontSize(10);
+  pdf.text("For Director ACE Sindh", 170, 199, { align: "right" });
+  pdf.text(`Phone: ${phone}`, 135, 204); // Add the entered phone number in the footer
+
+  // Save the PDF
+  pdf.save("order.pdf");
+}
+  </script>
+
+    
+
+
+
+  
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
